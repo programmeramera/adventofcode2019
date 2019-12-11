@@ -9,7 +9,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
 }
 
 fn part_one(input: &str) {
-    println!("The answer for part one is {}", process(&input));
+    println!("The answer for day two, part one, is {}", process(&input));
 }
 
 fn part_two(_input: &str) {
@@ -22,7 +22,6 @@ fn part_two(_input: &str) {
 
 fn process(input: &str) -> i32 {
     let mut registers: Vec<i32> = input.split(',').map(|register| {
-        println!("{}", register);
         return register.parse().expect("Failed to parse number")
     }).collect();
 
