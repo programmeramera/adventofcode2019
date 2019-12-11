@@ -27,7 +27,7 @@ fn process(input: &str) -> i32 {
     }).collect();
 
     registers[1] = 12;
-    registers[2] = 1;
+    registers[2] = 2;
 
     //let mut result: String = String::new();
     // Do the actual processing here
