@@ -13,19 +13,14 @@ fn part_one(input: &str) {
 }
 
 fn part_two(input: &str) {
-    let mut noun = 0;
-    let mut verb = 0;
-    loop {
-        verb = 0;
-        loop {
-            let result = process(&input.clone(), noun, verb);
+    for noun in 0..100 {
+        for verb in 0..100 {
+            let (result, sum) = process_sum(&input.clone(), noun, verb);
             if result == 19690720 { 
-                println!("The answer for day two, part two, is: {}", 100 * noun + verb);
+                println!("The answer for day two, part two, is: {}", sum);
                 return;
             }
-            if verb == 99 { break; } else { verb += 1; }
         }
-        if noun == 99 { break; } else { noun += 1; }
     }
 }
 
