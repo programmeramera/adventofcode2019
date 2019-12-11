@@ -4,31 +4,43 @@ use std::fs;
 pub fn run() -> Result<(), Box<dyn Error>> {
     let input = fs::read_to_string("input/input_day_two.txt")?;
     part_one(&input.trim());
-    part_two(&input);
+    part_two(&input.trim());
     Ok(())
 }
 
 fn part_one(input: &str) {
-    println!("The answer for day two, part one, is {}", process(&input));
+    println!("The answer for day two, part one, is {}", process(&input, 12, 2));
 }
 
-fn part_two(_input: &str) {
-    // let answer: i32 = input
-    //     .lines()
-    //     .map(|line| fuel_recursive(line.parse().expect("Failed to parse number")))
-    //     .sum();
-    // println!("The answer for day two is {}", answer);
+fn part_two(input: &str) {
+    let mut noun = 0;
+    let mut verb = 0;
+    loop {
+        verb = 0;
+        loop {
+            let result = process(&input.clone(), noun, verb);
+            if result == 19690720 { 
+                println!("The answer for day two, part two, is: {}", 100 * noun + verb);
+                return;
+            }
+            if verb == 99 { break; } else { verb += 1; }
+        }
+        if noun == 99 { break; } else { noun += 1; }
+    }
 }
 
-fn process(input: &str) -> i32 {
+fn process_sum(input: &str, noun: i32, verb: i32) -> (i32, i32) {
+    (process(&input.clone(), noun, verb), 100 * noun + verb)
+}
+
+fn process(input: &str, noun: i32, verb: i32) -> i32 {
     let mut registers: Vec<i32> = input.split(',').map(|register| {
         return register.parse().expect("Failed to parse number")
     }).collect();
 
-    registers[1] = 12;
-    registers[2] = 2;
+    registers[1] = noun;
+    registers[2] = verb;
 
-    //let mut result: String = String::new();
     // Do the actual processing here
     let mut index = 0;
     loop {
@@ -59,18 +71,21 @@ fn process(input: &str) -> i32 {
 
 #[cfg(test)]
 mod tests {
-    use super::{process};
+    use super::{process, process_sum};
 
     #[test]
     fn day2_1_test_cases() {
-        assert_eq!(process("1,0,0,0,99"), 2); // 1 + 1 = 2
-        assert_eq!(process("2,3,0,3,99"), 2); // 3 * 2 = 6
-        assert_eq!(process("2,4,4,5,99,0"), 2); // 99 * 99 = 9801
-        assert_eq!(process("1,1,1,4,99,5,6,0,99"), 30);
+        assert_eq!(process("1,0,0,0,99",0,0), 2); // 1 + 1 = 2
+        assert_eq!(process("2,3,0,3,99",3,0), 2); // 3 * 2 = 6
+        assert_eq!(process("2,4,4,5,99,0",4,4), 2); // 99 * 99 = 9801
+        assert_eq!(process("1,1,1,4,99,5,6,0,99",1,1), 30);
     }
 
-    // #[test]
-    // fn day2_2_test_cases() {
-
-    // }
+    #[test]
+    fn day2_2_test_cases() {
+        assert_eq!(process_sum("1,0,0,0,99",0,0), (2, 0));
+        assert_eq!(process_sum("2,3,0,3,99",3,0), (2, 300)); // 3 * 2 = 6
+        assert_eq!(process_sum("2,4,4,5,99,0",4,4), (2, 404)); // 99 * 99 = 9801
+        assert_eq!(process_sum("1,1,1,4,99,5,6,0,99",1,1), (30, 101));
+    }
 }
